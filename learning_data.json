@@ -1,6 +1,34 @@
 {
   "all_words": [
     {
+        "english": "challenge",
+        "chinese": "挑战",
+        "success_count": 0,
+        "next_review_date": "2025-05-12",
+        "example": "Catching fireflies is our night challenge_捉萤火虫是我们夜晚的挑战游戏"
+    },
+    {
+        "english": "path",
+        "chinese": "小路",
+        "success_count": 0,
+        "next_review_date": "2025-05-12",
+        "example": "The secret path has stone turtles hiding_神秘小路藏着石雕小乌龟"
+    },
+    {
+        "english": "minute",
+        "chinese": "分钟",
+        "success_count": 0,
+        "next_review_date": "2025-05-12",
+        "example": "We count 60 hops in one minute_单脚跳60次就是一分钟"
+    },
+    {
+        "english": "hill",
+        "chinese": "山坡",
+        "success_count": 0,
+        "next_review_date": "2025-05-12",
+        "example": "Grass sledding down the small hill is funny_坐着草垫滑下小山坡超有趣"
+    },
+    {
       "english": "local",
       "chinese": "本地的",
       "success_count": 1,
