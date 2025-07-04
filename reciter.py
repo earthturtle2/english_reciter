@@ -9,6 +9,7 @@ from prettytable import PrettyTable
 from tencentcloud.hunyuan.v20230901 import hunyuan_client, models
 from tencentcloud.common import credential
 import re
+import readchar
 
 # 配置项
 class Config:
@@ -268,12 +269,6 @@ class WordReciter:
         except Exception as e:
             print(f"⚠️ 语音生成过程中发生错误: {str(e)}")
 
-    def remove_extra_underscores(text):
-        if '_' not in text:
-            return text
-        first_occurrence = text.index('_')
-        # 保留第一个下划线，后续所有下划线删除
-        return text[:first_occurrence+1] + text[first_occurrence+1:].replace('_', '')
     def _practice_word(self, word):
         """单个单词练习流程"""
         print(f"\n{'━'*30}")
@@ -283,14 +278,24 @@ class WordReciter:
         example = self._get_example(word)
         if '_' in example:
             first_occurrence = example.index('_')
-        # 保留第一个下划线，后续所有下划线删除
+            # 保留第一个下划线，后续所有下划线删除
             example = example[:first_occurrence+1] + example[first_occurrence+1:].replace('_', '')
 
         if not word.example: 
             word.example = example
         
         en_example, zh_example = example.split('_') if '_' in example else (example, "")
-        blanked_example = en_example.replace(word.english, '_'*len(word.english))
+        
+        # 忽略大小写进行替换
+        lower_en_example = en_example.lower()
+        lower_word = word.english.lower()
+        start_index = lower_en_example.find(lower_word)
+        if start_index != -1:
+            end_index = start_index + len(word.english)
+            blanked_part = '_' * len(word.english) + f"({len(word.english)})"
+            blanked_example = en_example[:start_index] + blanked_part + en_example[end_index:]
+        else:
+            blanked_example = en_example
         
         print(f"📖 中文释义: {word.chinese}")
         print(f"📝 例句: {blanked_example}")
@@ -300,24 +305,38 @@ class WordReciter:
         # 拼写测试
         attempt = 0
         while attempt < 3:
-            answer = input("请输入英文单词（h=显示答案，s=播放语音）: ").strip().lower()
-            
-            if answer == 'h':
-                print(f"正确答案: {word.english}")
+            answer = ""
+            print("请输入英文单词（h=显示答案，s=播放语音）: ", end='', flush=True)
+            while True:
+                char = readchar.readchar()
+                if char == '\n':  # 回车提交答案
+                    break
+                elif char == '\x7f':  # 退格键
+                    if answer: 
+                        answer = answer[:-1]
+                        print(' ', end='', flush=True)  # 清除显示的字符
+                else: 
+                    answer += char
+                    print(char, end='', flush=True)
+                # 在同一行更新输入提示和字母计数
+                print(f"\r已输入 {len(answer)} 个字母。请输入英文单词（h=显示答案，s=播放语音）: {answer}", end='', flush=True)
+
+            answer = answer.strip().lower()
+            if answer == "h":
+                print(f"\n📢 正确答案: {word.english}")
                 return False
-            if answer == 's':
+            if answer == "s":
                 self._text_to_speech(example)
+                print("\n")  # 新增换行
                 continue
-                
             if answer == word.english.lower():
-                print("✅ 正确！")
+                print("\n✅ 正确！")
                 self._text_to_speech(example)
                 return True
-            
             attempt += 1
-            print(f"❌ 错误（剩余尝试次数 {3 - attempt}）")
-        
-        print(f"📢 正确答案: {word.english}")
+            print(f"\n❌ 错误（剩余尝试次数 {3 - attempt}）")
+
+        print(f"\n📢 正确答案: {word.english}")
         return False
 
     def daily_review(self):
@@ -386,11 +405,26 @@ class WordReciter:
                 data = json.load(f)
                 self.all_words = [Word.from_dict(w) for w in data['all_words']]
                 self.mastered_words = [Word.from_dict(w) for w in data['mastered_words']]
-                self.reviewed_mastered_words = set(data.get('reviewed_mastered_words', []))  # 新增
-        except (FileNotFoundError, json.JSONDecodeError):
+                self.reviewed_mastered_words = set(data.get('reviewed_mastered_words', []))
+                
+                # 新增统计信息
+                total_words = len(self.all_words) + len(self.mastered_words)
+                mastered_count = len(self.mastered_words)
+                reviewed_count = len(self.reviewed_mastered_words)
+                print(f"📊 单词统计: 总计 {total_words} 个 | 已掌握 {mastered_count} 个 | 已复习 {reviewed_count} 个")
+        except FileNotFoundError:
+            print(f"⚠️ 数据文件 {Config.DATA_FILE} 不存在，将创建新文件")
             self.all_words = []
             self.mastered_words = []
-            self.reviewed_mastered_words = set()  # 新增
+            self.reviewed_mastered_words = set()
+            print("📊 单词统计: 总计 0 个 | 已掌握 0 个 | 已复习 0 个")
+        except json.JSONDecodeError as e:
+            print(f"⚠️ 数据文件 {Config.DATA_FILE} 格式错误: {str(e)}")
+            print("⚠️ 可能是文件损坏，将重置为初始状态")
+            self.all_words = []
+            self.mastered_words = []
+            self.reviewed_mastered_words = set()
+            print("📊 单词统计: 总计 0 个 | 已掌握 0 个 | 已复习 0 个")
 
     def _save_data(self):
         """保存学习数据"""
