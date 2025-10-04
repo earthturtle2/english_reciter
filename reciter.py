@@ -18,20 +18,29 @@ class Config:
     EXAMPLE_DB = "word_examples.json"
     MAX_SUCCESS_COUNT = 4  # 成功4次即掌握
     TTS_ENABLED = True      # 是否启用语音功能
+    MAX_REVIEW_ROUND = 3    # 最大复习轮次
+    REVIEW_INTERVAL_DAYS = [1, 3, 7, 14, 30]  # 复习间隔天数
 
 # 腾讯混元大模型集成（需自行实现）
 class HunyuanGenerator:
-    def __init__(self, secret_id, secret_key):
-    # 本地基础例句库
+    def __init__(self, secret_id="", secret_key=""):
+        # 本地基础例句库
         self.local_db = {
             "apple": ["An apple a day keeps the doctor away.", 
                         "The apple pie smells delicious."],
             "book": ["This book is a masterpiece.",
                     "I borrowed the book from the library."]
         }
-        # 初始化腾讯混元大模型
-        cred = credential.Credential(secret_id, secret_key)
-        self.client = hunyuan_client.HunyuanClient(cred, "ap-beijing")
+        # 初始化腾讯混元大模型（仅在提供了有效的secret_id和secret_key时）
+        if secret_id and secret_key:
+            try:
+                cred = credential.Credential(secret_id, secret_key)
+                self.client = hunyuan_client.HunyuanClient(cred, "ap-beijing")
+            except Exception as e:
+                print(f"⚠️ 腾讯混元大模型初始化失败: {str(e)}")
+                self.client = None
+        else:
+            self.client = None
     def split_ch_en(text):
         # 匹配中文字符及常见中文标点（范围包含大部分常用汉字和中文符号）
         ch_pattern = re.compile(r'[\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]+')
@@ -53,52 +62,56 @@ class HunyuanGenerator:
             if not word or not isinstance(word, str):
                 print("⚠️ 无效的单词输入")
                 return None
-        
-            # 准备请求
-            req = models.ChatCompletionsRequest()
-            req.Model = "hunyuan-lite"
-            req.Messages = [
-                {
-                    "Role": "user",
-                    "Content": f"请生成一包含英文单词'{word}'的例句，全部小写字母, 带中文翻译。输出格式为英文例句_中文翻译, 不要其他多余的输出"
-                }
-            ]
-        
-            # 设置超时时间
-            self.client.set_timeout(10)  # 10秒超时
-        
-            # 发送请求
-            resp = self.client.ChatCompletions(req)
             
-            # 处理响应
-            if not resp or not resp.Choices:
-                print("⚠️ 未获取到有效响应")
-                return None
-        
-            # 解析响应
-            raw_list = resp.Choices[0].Message.Content.split('\n')
-            if not raw_list:
-                print("⚠️ 响应内容格式错误")
-                return None
-        
-            # 返回随机例句
-            return random.choice(raw_list)
+            # 如果腾讯混元大模型可用，优先使用
+            if self.client:
+                # 准备请求
+                req = models.ChatCompletionsRequest()
+                req.Model = "hunyuan-lite"
+                req.Messages = [
+                    {
+                        "Role": "user",
+                        "Content": f"请生成一包含英文单词'{word}'的例句，全部小写字母, 带中文翻译。输出格式为英文例句_中文翻译, 不要其他多余的输出"
+                    }
+                ]
+            
+                # 设置超时时间
+                self.client.set_timeout(10)  # 10秒超时
+            
+                # 发送请求
+                resp = self.client.ChatCompletions(req)
+                
+                # 处理响应
+                if not resp or not resp.Choices:
+                    print("⚠️ 未获取到有效响应")
+                else:
+                    # 解析响应
+                    raw_list = resp.Choices[0].Message.Content.split('\n')
+                    if raw_list:
+                        # 返回随机例句
+                        return random.choice(raw_list)
         
         except Exception as e:
             print(f"⚠️ 获取例句失败: {str(e)}")
-            # 返回本地例句库中的例句
-            if word.lower() in self.local_db:
-                return random.choice(self.local_db[word.lower()])
-            return None
+            
+        # 返回本地例句库中的例句
+        if word.lower() in self.local_db:
+            return random.choice(self.local_db[word.lower()])
+        
+        # 生成默认例句
+        return f"This is an example sentence with {word}_这是一个包含{word}的例句"
 
 # 单词类
 class Word:
-    def __init__(self, english, chinese, success_count=0, next_review_date=None, example=None):
+    def __init__(self, english, chinese, success_count=0, next_review_date=None, example=None, 
+                 review_round=0, review_count=0):
         self.english = english
         self.chinese = chinese
         self.success_count = success_count
         self.next_review_date = next_review_date or date.today()
         self.example = example
+        self.review_round = review_round  # 当前复习轮次
+        self.review_count = review_count  # 总复习次数
 
     def to_dict(self):
         return {
@@ -106,12 +119,17 @@ class Word:
             'chinese': self.chinese,
             'success_count': self.success_count,
             'next_review_date': self.next_review_date.isoformat(),
-            'example': self.example
+            'example': self.example,
+            'review_round': self.review_round,
+            'review_count': self.review_count
         }
 
     @classmethod
     def from_dict(cls, data):
         data['next_review_date'] = date.fromisoformat(data['next_review_date'])
+        # 兼容旧版本数据
+        data.setdefault('review_round', 0)
+        data.setdefault('review_count', 0)
         return cls(**data)
 
 # 核心背诵系统
@@ -121,12 +139,13 @@ class WordReciter:
         self.all_words = []        # 待复习单词
         self.mastered_words = []   # 已掌握单词
         self.today = date.today()
-        self.reviewed_mastered_words = set()  # 新增：记录已复习的已掌握词汇
+        self.current_review_round = 0  # 当前复习轮次
         
         # 初始化数据
         self.example_db = self._load_example_db()
         self._load_data()
         self._process_overdue_words()
+        self._update_review_round()  # 更新复习轮次
 
     def show_mastered_words(self):
         """显示已掌握词汇"""
@@ -136,46 +155,45 @@ class WordReciter:
             
         table = PrettyTable()
         table.title = "🎓 已掌握词汇"
-        table.field_names = ["英文", "中文", "掌握日期", "已复习次数"]
+        table.field_names = ["英文", "中文", "掌握日期", "复习次数"]
         
         for word in self.mastered_words:
-            # 计算已复习次数
-            review_count = 1 if word.english in self.reviewed_mastered_words else 0
             table.add_row([
                 word.english,
                 word.chinese,
                 word.next_review_date.strftime("%Y-%m-%d"),
-                review_count
+                word.review_count
             ])
         
         print(table)
         print(f"\n📊 总计已掌握单词: {len(self.mastered_words)}")
 
     def review_mastered_words(self):
-        """随机挑选10个已掌握词汇进行复习"""
+        """复习已掌握词汇：优先选择复习次数最少的单词，确保不遗漏"""
         if not self.mastered_words:
             print("\n📚 您还没有掌握任何单词")
             return
             
-        # 获取未复习过的单词
-        available_words = [w for w in self.mastered_words if w.english not in self.reviewed_mastered_words]
+        # 按复习次数排序，优先选择复习次数最少的单词
+        sorted_words = sorted(self.mastered_words, key=lambda w: w.review_count)
         
-        # 如果所有单词都已复习过，重置记录
-        if not available_words:
-            print("\n🎉 所有已掌握单词都已复习过一遍，现在重新开始")
-            self.reviewed_mastered_words = set()
-            available_words = self.mastered_words
-            
-        # 随机选择最多10个单词
-        selected_words = random.sample(available_words, min(10, len(available_words)))
+        # 选择前10个单词（复习次数最少的）
+        selected_words = sorted_words[:10]
         
-        print(f"\n📚 开始复习 {len(selected_words)} 个已掌握单词")
+        print(f"\n📚 开始复习 {len(selected_words)} 个已掌握单词（按复习次数排序）")
+        
         for word in selected_words:
             self._practice_word(word)
-            self.reviewed_mastered_words.add(word.english)
-            self._save_data()  # 新增：每次复习后立即保存
+            # 更新复习次数
+            word.review_count += 1
+            self._save_data()  # 每次复习后立即保存
             
         print("\n📊 本次复习完成！")
+        
+        # 检查是否所有单词都已复习过至少一次
+        if all(word.review_count > 0 for word in self.mastered_words):
+            print("🎉 所有已掌握单词已完成第一轮复习！")
+            print("📈 下一轮复习将按复习次数排序，确保公平复习")
 
     def _load_example_db(self):
         """加载本地例句库"""
@@ -191,17 +209,52 @@ class WordReciter:
             if word.next_review_date < self.today:
                 word.next_review_date = self.today
 
+    def _update_review_round(self):
+        """更新复习轮次"""
+        # 计算当前复习轮次
+        if self.all_words:
+            min_review_round = min(word.review_round for word in self.all_words)
+            self.current_review_round = min_review_round
+        else:
+            self.current_review_round = 0
+            
+        print(f"📊 当前复习轮次: 第{self.current_review_round + 1}轮")
+
     def _get_today_review_list(self):
-        """获取今日复习列表"""
-        return [w for w in self.all_words if w.next_review_date <= self.today]
+        """获取今日复习列表（轮次复习逻辑）"""
+        # 首先获取所有到期的单词
+        overdue_words = [w for w in self.all_words if w.next_review_date <= self.today]
+        
+        if not overdue_words:
+            return []
+            
+        # 按复习轮次分组
+        words_by_round = {}
+        for word in overdue_words:
+            if word.review_round not in words_by_round:
+                words_by_round[word.review_round] = []
+            words_by_round[word.review_round].append(word)
+        
+        # 优先选择当前轮次的单词
+        if self.current_review_round in words_by_round:
+            current_round_words = words_by_round[self.current_review_round]
+            # 按复习次数排序，优先复习次数少的单词
+            current_round_words.sort(key=lambda w: w.review_count)
+            return current_round_words
+        
+        # 如果没有当前轮次的单词，选择最小轮次的单词
+        min_round = min(words_by_round.keys())
+        min_round_words = words_by_round[min_round]
+        min_round_words.sort(key=lambda w: w.review_count)
+        return min_round_words
 
     def show_status(self):
-        """显示复习状态看板"""
+        """显示复习状态看板（包含轮次信息）"""
         table = PrettyTable()
-        table.title = "📅 单词复习看板"
-        table.field_names = ["英文", "中文", "掌握进度", "下次复习", "剩余天数"]
+        table.title = f"📅 单词复习看板（第{self.current_review_round + 1}轮）"
+        table.field_names = ["英文", "中文", "掌握进度", "复习轮次", "复习次数", "下次复习", "剩余天数"]
         
-        for word in sorted(self.all_words, key=lambda x: x.next_review_date):
+        for word in sorted(self.all_words, key=lambda x: (x.review_round, x.review_count, x.next_review_date)):
             remaining_days = (word.next_review_date - self.today).days
             progress_bar = f"{word.success_count}/{Config.MAX_SUCCESS_COUNT} " + \
                           "★"*word.success_count + "☆"*(Config.MAX_SUCCESS_COUNT-word.success_count)
@@ -210,12 +263,29 @@ class WordReciter:
                 word.english,
                 word.chinese,
                 progress_bar,
+                f"第{word.review_round + 1}轮",
+                word.review_count,
                 word.next_review_date.strftime("%Y-%m-%d"),
                 remaining_days if remaining_days > 0 else "今天"
             ])
         
         print(table)
-        print(f"\n🎉 已掌握单词数量: {len(self.mastered_words)}")
+        
+        # 显示统计信息
+        stats = PrettyTable()
+        stats.title = "📊 学习统计"
+        stats.field_names = ["统计项", "数量"]
+        stats.add_row(["当前复习轮次", f"第{self.current_review_round + 1}轮"])
+        stats.add_row(["待复习单词", len(self.all_words)])
+        stats.add_row(["已掌握单词", len(self.mastered_words)])
+        stats.add_row(["总单词数", len(self.all_words) + len(self.mastered_words)])
+        
+        # 计算平均复习次数
+        if self.all_words:
+            avg_review_count = sum(w.review_count for w in self.all_words) / len(self.all_words)
+            stats.add_row(["平均复习次数", f"{avg_review_count:.1f}"])
+        
+        print(stats)
 
     def _get_example(self, word):
         """获取最佳例句"""
@@ -340,17 +410,20 @@ class WordReciter:
         return False
 
     def daily_review(self):
-        """执行每日复习"""
+        """执行每日复习（轮次复习逻辑）"""
         review_list = self._get_today_review_list()
         if not review_list:
             print("\n🎉 今日没有需要复习的单词！")
             return
 
-        print(f"\n📚 今日需要复习 {len(review_list)} 个单词")
-        random.shuffle(review_list)  # 打乱顺序
+        print(f"\n📚 今日需要复习 {len(review_list)} 个单词（第{self.current_review_round + 1}轮）")
         
         mastered_today = 0
         total_words = len(review_list)
+        
+        # 按复习次数排序，确保复习次数少的单词优先被复习
+        review_list.sort(key=lambda w: w.review_count)
+        
         for index, word in enumerate(review_list.copy(), start=1):
             print(f"\n⏳ 剩余 {total_words - index + 1} 个单词需要复习")
             success = self._practice_word(word)
@@ -358,6 +431,7 @@ class WordReciter:
             # 更新单词状态
             if success:
                 word.success_count += 1
+                word.review_count += 1  # 增加复习次数
                 
                 if word.success_count >= Config.MAX_SUCCESS_COUNT:
                     self.mastered_words.append(word)
@@ -365,24 +439,55 @@ class WordReciter:
                     mastered_today += 1
                     print(f"🎉 已掌握单词: {word.english}")
                 else:
-                    # 设置下次复习时间
-                    delta_days = word.success_count
+                    # 根据复习轮次设置间隔天数
+                    if word.review_round < len(Config.REVIEW_INTERVAL_DAYS):
+                        delta_days = Config.REVIEW_INTERVAL_DAYS[word.review_round]
+                    else:
+                        delta_days = Config.REVIEW_INTERVAL_DAYS[-1]  # 使用最大间隔
+                    
                     word.next_review_date = self.today + timedelta(days=delta_days)
                     print(f"⏱ 下次复习: {word.next_review_date} (+{delta_days}天)")
             else:
+                word.review_count += 1  # 即使失败也记录复习次数
                 print("⏳ 保持原复习计划")
+            
+            # 检查是否需要进入下一轮复习
+            self._check_and_advance_round()
 
-        # 保存进度
-        self._save_data()
-        
         # 显示日报
         print("\n📊 今日复习报告:")
         report = PrettyTable()
         report.field_names = ["统计项", "数量"]
         report.add_row(["复习单词总数", len(review_list)])
         report.add_row(["新掌握单词", mastered_today])
+        report.add_row(["当前复习轮次", f"第{self.current_review_round + 1}轮"])
         report.add_row(["当前进度", f"{len(self.mastered_words)} 已掌握 / {len(self.all_words)} 待复习"])
         print(report)
+        
+        # 保存进度
+        self._save_data()
+
+    def _check_and_advance_round(self):
+        """检查并推进复习轮次"""
+        # 检查当前轮次的所有单词是否都已复习过
+        current_round_words = [w for w in self.all_words if w.review_round == self.current_review_round]
+        
+        if not current_round_words:
+            # 当前轮次没有单词，进入下一轮
+            if self.current_review_round < Config.MAX_REVIEW_ROUND:
+                self.current_review_round += 1
+                print(f"\n🎯 进入第{self.current_review_round + 1}轮复习！")
+                
+                # 更新所有单词的复习轮次
+                for word in self.all_words:
+                    if word.review_round < self.current_review_round:
+                        word.review_round = self.current_review_round
+                        # 根据新轮次设置复习间隔
+                        if word.review_round < len(Config.REVIEW_INTERVAL_DAYS):
+                            delta_days = Config.REVIEW_INTERVAL_DAYS[word.review_round]
+                        else:
+                            delta_days = Config.REVIEW_INTERVAL_DAYS[-1]
+                        word.next_review_date = self.today + timedelta(days=delta_days)
 
     def add_words(self, words):
         """批量添加单词"""
@@ -399,39 +504,48 @@ class WordReciter:
         print(f"✅ 成功添加 {len(new_words)} 个新单词")
 
     def _load_data(self):
-        """加载学习数据"""
+        """加载学习数据（兼容新数据结构）"""
         try:
             with open(Config.DATA_FILE) as f:
                 data = json.load(f)
                 self.all_words = [Word.from_dict(w) for w in data['all_words']]
                 self.mastered_words = [Word.from_dict(w) for w in data['mastered_words']]
-                self.reviewed_mastered_words = set(data.get('reviewed_mastered_words', []))
+                
+                # 兼容旧版本数据：为旧数据添加复习轮次和复习次数
+                for word in self.all_words + self.mastered_words:
+                    if not hasattr(word, 'review_round'):
+                        word.review_round = 0
+                    if not hasattr(word, 'review_count'):
+                        word.review_count = 0
                 
                 # 新增统计信息
                 total_words = len(self.all_words) + len(self.mastered_words)
                 mastered_count = len(self.mastered_words)
-                reviewed_count = len(self.reviewed_mastered_words)
-                print(f"📊 单词统计: 总计 {total_words} 个 | 已掌握 {mastered_count} 个 | 已复习 {reviewed_count} 个")
+                
+                # 计算平均复习次数
+                if self.all_words:
+                    avg_review_count = sum(w.review_count for w in self.all_words) / len(self.all_words)
+                else:
+                    avg_review_count = 0
+                    
+                print(f"📊 单词统计: 总计 {total_words} 个 | 已掌握 {mastered_count} 个 | 平均复习次数 {avg_review_count:.1f}")
         except FileNotFoundError:
             print(f"⚠️ 数据文件 {Config.DATA_FILE} 不存在，将创建新文件")
             self.all_words = []
             self.mastered_words = []
-            self.reviewed_mastered_words = set()
-            print("📊 单词统计: 总计 0 个 | 已掌握 0 个 | 已复习 0 个")
+            print("📊 单词统计: 总计 0 个 | 已掌握 0 个 | 平均复习次数 0.0")
         except json.JSONDecodeError as e:
             print(f"⚠️ 数据文件 {Config.DATA_FILE} 格式错误: {str(e)}")
             print("⚠️ 可能是文件损坏，将重置为初始状态")
             self.all_words = []
             self.mastered_words = []
-            self.reviewed_mastered_words = set()
-            print("📊 单词统计: 总计 0 个 | 已掌握 0 个 | 已复习 0 个")
+            print("📊 单词统计: 总计 0 个 | 已掌握 0 个 | 平均复习次数 0.0")
 
     def _save_data(self):
         """保存学习数据"""
         data = {
             'all_words': [w.to_dict() for w in self.all_words],
-            'mastered_words': [w.to_dict() for w in self.mastered_words],
-            'reviewed_mastered_words': list(self.reviewed_mastered_words)  # 新增
+            'mastered_words': [w.to_dict() for w in self.mastered_words]
         }
         with open(Config.DATA_FILE, 'w') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
