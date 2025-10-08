@@ -1,31 +1,103 @@
 {
   "all_words": [
     {
-      "english": "street",
-      "chinese": "街道",
-      "success_count": 2,
-      "next_review_date": "2025-10-04",
-      "example": "The charming cobblestone street was lined with cafes and boutiques_这条迷人的鹅卵石街道两旁遍布咖啡馆和精品店 | Children were playing safely on the quiet residential street_孩子们在安静的住宅区街道上安全地玩耍",
+      "english": "feast",
+      "chinese": "宴会/盛宴/宗教节日",
+      "success_count": 1,
+      "next_review_date": "2025-10-09",
+      "example": "The king held a feast for all his loyal subjects_国王为他所有忠诚的臣民举行了一场盛宴",
       "review_round": 0,
-      "review_count": 0
+      "review_count": 1
     },
     {
-      "english": "charming",
-      "chinese": "迷人的/有魅力的",
-      "success_count": 2,
-      "next_review_date": "2025-10-04",
-      "example": "We stayed in a charming little cottage with a beautiful garden_我们住在一座带有漂亮花园的迷人小屋里 | The guide's charming storytelling made the history come alive_导游迷人的讲述让历史变得生动起来",
+      "english": "album",
+      "chinese": "专辑/相册/集邮册",
+      "success_count": 1,
+      "next_review_date": "2025-10-09",
+      "example": "This music album contains all the artist's greatest hits_这张音乐专辑包含了这位艺术家的所有热门歌曲",
       "review_round": 0,
-      "review_count": 0
+      "review_count": 1
     },
     {
-      "english": "unforgettable",
-      "chinese": "难忘的",
-      "success_count": 2,
-      "next_review_date": "2025-10-04",
-      "example": "The view of the sunset over the mountains was truly unforgettable_山间日落的景色真是令人难忘 | It was an unforgettable experience volunteering at the animal shelter_在动物收容所做志愿者是一次难忘的经历",
+      "english": "tradition",
+      "chinese": "传统/惯例",
+      "success_count": 1,
+      "next_review_date": "2025-10-09",
+      "example": "The company has a long tradition of fine design_这家公司的优秀设计历史悠久",
       "review_round": 0,
-      "review_count": 0
+      "review_count": 1
+    },
+    {
+      "english": "ancient",
+      "chinese": "古老的/古代的",
+      "success_count": 1,
+      "next_review_date": "2025-10-09",
+      "example": "We visited an ancient temple full of treasures and saintly relics_我们参观了一座充满宝藏和神圣遗物的古老寺庙",
+      "review_round": 0,
+      "review_count": 1
+    },
+    {
+      "english": "wrap",
+      "chinese": "包裹/缠绕",
+      "success_count": 1,
+      "next_review_date": "2025-10-09",
+      "example": "She spent the morning wrapping up the birthday gifts_她花了一个早上的时间把生日礼物都包了起来",
+      "review_round": 0,
+      "review_count": 1
+    },
+    {
+      "english": "town",
+      "chinese": "城镇/市镇",
+      "success_count": 1,
+      "next_review_date": "2025-10-09",
+      "example": "We chose to live out of town and commute to work every day_我们选择住在郊外，每天通勤上班",
+      "review_round": 0,
+      "review_count": 1
+    },
+    {
+      "english": "stick",
+      "chinese": "棍棒/粘贴/坚持",
+      "success_count": 1,
+      "next_review_date": "2025-10-09",
+      "example": "The children used a stick to draw pictures in the sand_孩子们用棍子在沙地上画画",
+      "review_round": 0,
+      "review_count": 1
+    },
+    {
+      "english": "grateful",
+      "chinese": "感激的/感谢的",
+      "success_count": 1,
+      "next_review_date": "2025-10-09",
+      "example": "I am extremely grateful to you for your selfless assistance_我非常感谢你无私的帮助",
+      "review_round": 0,
+      "review_count": 1
+    },
+    {
+      "english": "laughter",
+      "chinese": "笑声",
+      "success_count": 3,
+      "next_review_date": "2025-10-09",
+      "example": "The sound of laughter echoed through the hall_笑声在整个大厅里回荡",
+      "review_round": 0,
+      "review_count": 3
+    },
+    {
+      "english": "fill",
+      "chinese": "填充/装满",
+      "success_count": 3,
+      "next_review_date": "2025-10-09",
+      "example": "Please fill the glass with water_请把杯子装满水",
+      "review_round": 0,
+      "review_count": 3
+    },
+    {
+      "english": "packet",
+      "chinese": "包/数据包",
+      "success_count": 3,
+      "next_review_date": "2025-10-09",
+      "example": "She received a packet of seeds from the garden center_她从园艺中心收到了一包种子",
+      "review_round": 0,
+      "review_count": 3
     }
   ],
   "mastered_words": [
@@ -793,6 +865,69 @@
       "example": "May I borrow your calculator?_能借你的计算器吗？",
       "review_round": 0,
       "review_count": 0
+    },
+    {
+      "english": "street",
+      "chinese": "街道",
+      "success_count": 4,
+      "next_review_date": "2025-10-06",
+      "example": "The charming cobblestone street was lined with cafes and boutiques_这条迷人的鹅卵石街道两旁遍布咖啡馆和精品店 | Children were playing safely on the quiet residential street_孩子们在安静的住宅区街道上安全地玩耍",
+      "review_round": 0,
+      "review_count": 2
+    },
+    {
+      "english": "charming",
+      "chinese": "迷人的/有魅力的",
+      "success_count": 4,
+      "next_review_date": "2025-10-06",
+      "example": "We stayed in a charming little cottage with a beautiful garden_我们住在一座带有漂亮花园的迷人小屋里 | The guide's charming storytelling made the history come alive_导游迷人的讲述让历史变得生动起来",
+      "review_round": 0,
+      "review_count": 2
+    },
+    {
+      "english": "unforgettable",
+      "chinese": "难忘的",
+      "success_count": 4,
+      "next_review_date": "2025-10-06",
+      "example": "The view of the sunset over the mountains was truly unforgettable_山间日落的景色真是令人难忘 | It was an unforgettable experience volunteering at the animal shelter_在动物收容所做志愿者是一次难忘的经历",
+      "review_round": 0,
+      "review_count": 2
+    },
+    {
+      "english": "garden",
+      "chinese": "花园",
+      "success_count": 4,
+      "next_review_date": "2025-10-08",
+      "example": "The children are playing happily in the garden behind the house_孩子们正在屋后的花园里开心地玩耍",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "admire",
+      "chinese": "欣赏/钦佩",
+      "success_count": 4,
+      "next_review_date": "2025-10-08",
+      "example": "I really admire the way she handles difficult situations with such calmness_我真的很欣赏她能以如此冷静的方式处理困境",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "mooncake",
+      "chinese": "月饼",
+      "success_count": 4,
+      "next_review_date": "2025-10-08",
+      "example": "Families often enjoy eating mooncakes while admiring the full moon during the Mid-Autumn Festival_在中秋节，家家户户常常边赏圆月边吃月饼",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "tell",
+      "chinese": "告诉/讲述",
+      "success_count": 4,
+      "next_review_date": "2025-10-08",
+      "example": "Could you tell me the story about how this tradition started_你能告诉我这个传统是怎么开始的吗",
+      "review_round": 0,
+      "review_count": 4
     }
   ]
 }

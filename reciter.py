@@ -16,10 +16,12 @@ class Config:
     WORD_FILE = "words.txt"
     DATA_FILE = "learning_data.json"
     EXAMPLE_DB = "word_examples.json"
-    MAX_SUCCESS_COUNT = 4  # 成功4次即掌握
+    MAX_SUCCESS_COUNT = 8  # 成功8次即掌握（基于艾宾浩斯遗忘曲线）
     TTS_ENABLED = True      # 是否启用语音功能
-    MAX_REVIEW_ROUND = 3    # 最大复习轮次
-    REVIEW_INTERVAL_DAYS = [1, 3, 7, 14, 30]  # 复习间隔天数
+    MAX_REVIEW_ROUND = 8    # 最大复习轮次（基于艾宾浩斯遗忘曲线）
+    # 艾宾浩斯遗忘曲线复习间隔：5分钟、30分钟、12小时、1天、2天、4天、7天、15天、30天
+    # 这里简化为：1天、2天、4天、7天、15天、30天、60天、90天（更符合长期记忆规律）
+    REVIEW_INTERVAL_DAYS = [1, 2, 4, 7, 15, 30, 60, 90]  # 基于艾宾浩斯遗忘曲线的复习间隔
 
 # 腾讯混元大模型集成（需自行实现）
 class HunyuanGenerator:
