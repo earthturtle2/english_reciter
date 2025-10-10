@@ -3,101 +3,101 @@
     {
       "english": "feast",
       "chinese": "宴会/盛宴/宗教节日",
-      "success_count": 1,
-      "next_review_date": "2025-10-09",
+      "success_count": 2,
+      "next_review_date": "2025-10-10",
       "example": "The king held a feast for all his loyal subjects_国王为他所有忠诚的臣民举行了一场盛宴",
       "review_round": 0,
-      "review_count": 1
+      "review_count": 2
     },
     {
       "english": "album",
       "chinese": "专辑/相册/集邮册",
-      "success_count": 1,
-      "next_review_date": "2025-10-09",
+      "success_count": 2,
+      "next_review_date": "2025-10-10",
       "example": "This music album contains all the artist's greatest hits_这张音乐专辑包含了这位艺术家的所有热门歌曲",
       "review_round": 0,
-      "review_count": 1
+      "review_count": 2
     },
     {
       "english": "tradition",
       "chinese": "传统/惯例",
-      "success_count": 1,
-      "next_review_date": "2025-10-09",
+      "success_count": 2,
+      "next_review_date": "2025-10-10",
       "example": "The company has a long tradition of fine design_这家公司的优秀设计历史悠久",
       "review_round": 0,
-      "review_count": 1
+      "review_count": 2
     },
     {
       "english": "ancient",
       "chinese": "古老的/古代的",
-      "success_count": 1,
-      "next_review_date": "2025-10-09",
+      "success_count": 2,
+      "next_review_date": "2025-10-10",
       "example": "We visited an ancient temple full of treasures and saintly relics_我们参观了一座充满宝藏和神圣遗物的古老寺庙",
       "review_round": 0,
-      "review_count": 1
+      "review_count": 2
     },
     {
       "english": "wrap",
       "chinese": "包裹/缠绕",
-      "success_count": 1,
-      "next_review_date": "2025-10-09",
+      "success_count": 2,
+      "next_review_date": "2025-10-10",
       "example": "She spent the morning wrapping up the birthday gifts_她花了一个早上的时间把生日礼物都包了起来",
       "review_round": 0,
-      "review_count": 1
+      "review_count": 2
     },
     {
       "english": "town",
       "chinese": "城镇/市镇",
-      "success_count": 1,
-      "next_review_date": "2025-10-09",
+      "success_count": 2,
+      "next_review_date": "2025-10-10",
       "example": "We chose to live out of town and commute to work every day_我们选择住在郊外，每天通勤上班",
       "review_round": 0,
-      "review_count": 1
+      "review_count": 2
     },
     {
       "english": "stick",
       "chinese": "棍棒/粘贴/坚持",
-      "success_count": 1,
-      "next_review_date": "2025-10-09",
+      "success_count": 2,
+      "next_review_date": "2025-10-10",
       "example": "The children used a stick to draw pictures in the sand_孩子们用棍子在沙地上画画",
       "review_round": 0,
-      "review_count": 1
+      "review_count": 2
     },
     {
       "english": "grateful",
       "chinese": "感激的/感谢的",
-      "success_count": 1,
-      "next_review_date": "2025-10-09",
+      "success_count": 2,
+      "next_review_date": "2025-10-10",
       "example": "I am extremely grateful to you for your selfless assistance_我非常感谢你无私的帮助",
       "review_round": 0,
-      "review_count": 1
+      "review_count": 2
     },
     {
       "english": "laughter",
       "chinese": "笑声",
-      "success_count": 3,
-      "next_review_date": "2025-10-09",
+      "success_count": 4,
+      "next_review_date": "2025-10-10",
       "example": "The sound of laughter echoed through the hall_笑声在整个大厅里回荡",
       "review_round": 0,
-      "review_count": 3
+      "review_count": 4
     },
     {
       "english": "fill",
       "chinese": "填充/装满",
-      "success_count": 3,
-      "next_review_date": "2025-10-09",
+      "success_count": 4,
+      "next_review_date": "2025-10-10",
       "example": "Please fill the glass with water_请把杯子装满水",
       "review_round": 0,
-      "review_count": 3
+      "review_count": 4
     },
     {
       "english": "packet",
       "chinese": "包/数据包",
-      "success_count": 3,
-      "next_review_date": "2025-10-09",
+      "success_count": 4,
+      "next_review_date": "2025-10-10",
       "example": "She received a packet of seeds from the garden center_她从园艺中心收到了一包种子",
       "review_round": 0,
-      "review_count": 3
+      "review_count": 4
     }
   ],
   "mastered_words": [

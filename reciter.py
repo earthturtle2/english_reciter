@@ -441,14 +441,19 @@ class WordReciter:
                     mastered_today += 1
                     print(f"🎉 已掌握单词: {word.english}")
                 else:
-                    # 根据复习轮次设置间隔天数
-                    if word.review_round < len(Config.REVIEW_INTERVAL_DAYS):
-                        delta_days = Config.REVIEW_INTERVAL_DAYS[word.review_round]
+                    # 根据success_count设置间隔天数（艾宾浩斯遗忘曲线）
+                    # 处理边界情况：新单词(success_count=0)应该立即复习
+                    if word.success_count == 0:
+                        delta_days = 0  # 新单词立即复习
                     else:
-                        delta_days = Config.REVIEW_INTERVAL_DAYS[-1]  # 使用最大间隔
+                        success_index = word.success_count - 1
+                        if success_index < len(Config.REVIEW_INTERVAL_DAYS):
+                            delta_days = Config.REVIEW_INTERVAL_DAYS[success_index]
+                        else:
+                            delta_days = Config.REVIEW_INTERVAL_DAYS[-1]  # 使用最大间隔
                     
                     word.next_review_date = self.today + timedelta(days=delta_days)
-                    print(f"⏱ 下次复习: {word.next_review_date} (+{delta_days}天)")
+                    print(f"⏱ 下次复习: {word.next_review_date} (+{delta_days}天，第{word.success_count}次成功)")
             else:
                 word.review_count += 1  # 即使失败也记录复习次数
                 print("⏳ 保持原复习计划")
@@ -484,11 +489,16 @@ class WordReciter:
                 for word in self.all_words:
                     if word.review_round < self.current_review_round:
                         word.review_round = self.current_review_round
-                        # 根据新轮次设置复习间隔
-                        if word.review_round < len(Config.REVIEW_INTERVAL_DAYS):
-                            delta_days = Config.REVIEW_INTERVAL_DAYS[word.review_round]
+                        # 根据success_count设置复习间隔（艾宾浩斯遗忘曲线）
+                        # 处理边界情况：新单词(success_count=0)应该立即复习
+                        if word.success_count == 0:
+                            delta_days = 0  # 新单词立即复习
                         else:
-                            delta_days = Config.REVIEW_INTERVAL_DAYS[-1]
+                            success_index = word.success_count - 1
+                            if success_index < len(Config.REVIEW_INTERVAL_DAYS):
+                                delta_days = Config.REVIEW_INTERVAL_DAYS[success_index]
+                            else:
+                                delta_days = Config.REVIEW_INTERVAL_DAYS[-1]
                         word.next_review_date = self.today + timedelta(days=delta_days)
 
     def add_words(self, words):
