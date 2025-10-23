@@ -420,7 +420,10 @@ class WordReciter:
 
         print(f"\n📚 今日需要复习 {len(review_list)} 个单词（第{self.current_review_round + 1}轮）")
         
+        # 初始化统计变量
         mastered_today = 0
+        correct_count = 0
+        wrong_count = 0
         total_words = len(review_list)
         
         # 按复习次数排序，确保复习次数少的单词优先被复习
@@ -430,8 +433,9 @@ class WordReciter:
             print(f"\n⏳ 剩余 {total_words - index + 1} 个单词需要复习")
             success = self._practice_word(word)
             
-            # 更新单词状态
+            # 更新统计
             if success:
+                correct_count += 1
                 word.success_count += 1
                 word.review_count += 1  # 增加复习次数
                 
@@ -455,17 +459,26 @@ class WordReciter:
                     word.next_review_date = self.today + timedelta(days=delta_days)
                     print(f"⏱ 下次复习: {word.next_review_date} (+{delta_days}天，第{word.success_count}次成功)")
             else:
+                wrong_count += 1
                 word.review_count += 1  # 即使失败也记录复习次数
                 print("⏳ 保持原复习计划")
             
             # 检查是否需要进入下一轮复习
             self._check_and_advance_round()
 
+        # 计算正确率
+        accuracy = 0
+        if total_words > 0:
+            accuracy = correct_count / total_words * 100
+
         # 显示日报
         print("\n📊 今日复习报告:")
         report = PrettyTable()
         report.field_names = ["统计项", "数量"]
-        report.add_row(["复习单词总数", len(review_list)])
+        report.add_row(["复习单词总数", total_words])
+        report.add_row(["正确复习数量", correct_count])
+        report.add_row(["错误复习数量", wrong_count])
+        report.add_row(["复习正确率", f"{accuracy:.1f}%"])
         report.add_row(["新掌握单词", mastered_today])
         report.add_row(["当前复习轮次", f"第{self.current_review_round + 1}轮"])
         report.add_row(["当前进度", f"{len(self.mastered_words)} 已掌握 / {len(self.all_words)} 待复习"])

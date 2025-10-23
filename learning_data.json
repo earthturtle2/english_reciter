@@ -1,103 +1,346 @@
 {
   "all_words": [
     {
-      "english": "feast",
-      "chinese": "宴会/盛宴/宗教节日",
-      "success_count": 2,
-      "next_review_date": "2025-10-10",
-      "example": "The king held a feast for all his loyal subjects_国王为他所有忠诚的臣民举行了一场盛宴",
+      "english": "since",
+      "chinese": "自从/因为",
+      "success_count": 1,
+      "next_review_date": "2025-10-23",
+      "example": "She has been learning English since she was ten years old_她从十岁起就开始学习英语了",
+      "review_round": 0,
+      "review_count": 1
+    },
+    {
+      "english": "mark",
+      "chinese": "标记/分数/痕迹",
+      "success_count": 1,
+      "next_review_date": "2025-10-23",
+      "example": "Please mark the important points in the document with a highlighter_请用荧光笔标记出文档中的重要点",
+      "review_round": 0,
+      "review_count": 1
+    },
+    {
+      "english": "route",
+      "chinese": "路线/路径",
+      "success_count": 1,
+      "next_review_date": "2025-10-23",
+      "example": "The delivery driver planned the most efficient route to save time and fuel_送货司机规划了最有效的路线以节省时间和燃料[1](@ref)",
+      "review_round": 0,
+      "review_count": 1
+    },
+    {
+      "english": "remind",
+      "chinese": "提醒/使想起",
+      "success_count": 1,
+      "next_review_date": "2025-10-23",
+      "example": "Could you please remind me to call my mother after the meeting_你能提醒我在会议结束后给我妈妈打电话吗",
+      "review_round": 0,
+      "review_count": 1
+    },
+    {
+      "english": "journey",
+      "chinese": "旅程/旅行",
+      "success_count": 1,
+      "next_review_date": "2025-10-23",
+      "example": "Their journey across the continent took them through many different landscapes and cultures_他们穿越大陆的旅程经历了许多不同的景观和文化[6](@ref)",
       "review_round": 0,
       "review_count": 2
+    },
+    {
+      "english": "without",
+      "chinese": "没有/无",
+      "success_count": 1,
+      "next_review_date": "2025-10-23",
+      "example": "He completed the entire project without any help from his colleagues_他在没有任何同事帮助的情况下完成了整个项目",
+      "review_round": 0,
+      "review_count": 1
+    },
+    {
+      "english": "science",
+      "chinese": "科学/自然科学",
+      "success_count": 3,
+      "next_review_date": "2025-10-26",
+      "example": "The science museum offers interactive exhibits for children to learn about physics and biology_科学博物馆为儿童提供了互动展品来学习物理和生物学",
+      "review_round": 0,
+      "review_count": 3
+    },
+    {
+      "english": "tech",
+      "chinese": "技术/科技",
+      "success_count": 3,
+      "next_review_date": "2025-10-26",
+      "example": "Silicon Valley is known for its concentration of tech companies and startups_硅谷以其聚集的科技公司和初创企业而闻名",
+      "review_round": 0,
+      "review_count": 3
+    },
+    {
+      "english": "section",
+      "chinese": "部分/区域/章节",
+      "success_count": 3,
+      "next_review_date": "2025-10-26",
+      "example": "Please read the first section of the textbook before tomorrow's class_请在明天上课前阅读教科书的第一章",
+      "review_round": 0,
+      "review_count": 3
+    },
+    {
+      "english": "experiment",
+      "chinese": "实验/试验",
+      "success_count": 3,
+      "next_review_date": "2025-10-26",
+      "example": "The chemistry students conducted an experiment to test the reaction between acids and bases_化学系的学生进行了一项实验来测试酸和碱之间的反应",
+      "review_round": 0,
+      "review_count": 3
+    },
+    {
+      "english": "despite",
+      "chinese": "尽管/即使",
+      "success_count": 3,
+      "next_review_date": "2025-10-24",
+      "example": "Their catering business remained strong despite the recession_尽管出现经济衰退，他们的酒席承办业仍然景气",
+      "review_round": 0,
+      "review_count": 3
+    },
+    {
+      "english": "chat",
+      "chinese": "聊天/闲聊",
+      "success_count": 3,
+      "next_review_date": "2025-10-24",
+      "example": "My kids spend hours chatting on the phone to their friends_我的几个孩子在电话上和朋友聊天一聊就是几个小时",
+      "review_round": 0,
+      "review_count": 3
+    },
+    {
+      "english": "distance",
+      "chinese": "距离/远方/疏远",
+      "success_count": 3,
+      "next_review_date": "2025-10-24",
+      "example": "He approached the door, maintaining a safe distance_他向门口走去，保持着安全的距离",
+      "review_round": 0,
+      "review_count": 3
+    },
+    {
+      "english": "glad",
+      "chinese": "高兴的/乐意的",
+      "success_count": 3,
+      "next_review_date": "2025-10-24",
+      "example": "I'm glad to hear that you passed the examination_我很高兴听到你通过了考试",
+      "review_round": 0,
+      "review_count": 3
+    },
+    {
+      "english": "experience",
+      "chinese": "经验/经历/体验",
+      "success_count": 3,
+      "next_review_date": "2025-10-24",
+      "example": "She has years of experience in teaching children_她在儿童教育方面有多年的经验",
+      "review_round": 0,
+      "review_count": 3
+    },
+    {
+      "english": "a",
+      "chinese": "一个/一种",
+      "success_count": 3,
+      "next_review_date": "2025-10-24",
+      "example": "She bought a book and a pen at the store_她在商店买了一本书和一支笔",
+      "review_round": 0,
+      "review_count": 3
+    },
+    {
+      "english": "topic",
+      "chinese": "主题/话题",
+      "success_count": 4,
+      "next_review_date": "2025-10-27",
+      "example": "The main topic of today's meeting is artificial intelligence technology_今天会议的主要主题是人工智能技术",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "technology",
+      "chinese": "技术/科技",
+      "success_count": 4,
+      "next_review_date": "2025-10-27",
+      "example": "Modern technology has greatly changed the way we communicate_现代科技极大地改变了我们的交流方式",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "explore",
+      "chinese": "探索/探究",
+      "success_count": 4,
+      "next_review_date": "2025-10-27",
+      "example": "Scientists continue to explore new possibilities in robot development_科学家们继续探索机器人发展的新可能性",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "connect",
+      "chinese": "连接/联系",
+      "success_count": 4,
+      "next_review_date": "2025-10-27",
+      "example": "You can connect your phone to the robot via Bluetooth_你可以通过蓝牙将手机连接到机器人",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "machine",
+      "chinese": "机器/机械",
+      "success_count": 4,
+      "next_review_date": "2025-10-27",
+      "example": "This washing machine can be controlled remotely through a smartphone_这台洗衣机可以通过智能手机远程控制",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "robot",
+      "chinese": "机器人",
+      "success_count": 4,
+      "next_review_date": "2025-10-27",
+      "example": "The household robot can be controlled by a mobile app_这个家用机器人可以通过手机应用控制",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "phone",
+      "chinese": "电话/手机",
+      "success_count": 4,
+      "next_review_date": "2025-10-27",
+      "example": "Smart phones have become essential tools for controlling modern devices_智能手机已成为控制现代设备的重要工具",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "internet",
+      "chinese": "互联网/因特网",
+      "success_count": 4,
+      "next_review_date": "2025-10-27",
+      "example": "We use the internet to search for information and communicate with people worldwide_我们使用互联网来搜索信息并与世界各地的人交流",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "spaceship",
+      "chinese": "宇宙飞船/太空飞船",
+      "success_count": 4,
+      "next_review_date": "2025-10-27",
+      "example": "The astronauts piloted the spaceship down to the lunar surface_宇航员驾驶宇宙飞船在月球表面降落[10](@ref)",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "camera",
+      "chinese": "照相机/摄像机",
+      "success_count": 4,
+      "next_review_date": "2025-10-27",
+      "example": "The spacecraft's camera captured stunning images of Earth from a million miles away_航天器相机从一百万英里外拍摄了令人惊叹的地球图像[3](@ref)",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "planet",
+      "chinese": "行星/星球",
+      "success_count": 4,
+      "next_review_date": "2025-10-27",
+      "example": "Earth is the planet we live on, and scientists are studying other planets in distant star systems_地球是我们居住的行星，科学家正在研究遥远恒星系中的其他行星[6,7](@ref)",
+      "review_round": 0,
+      "review_count": 4
+    },
+    {
+      "english": "feast",
+      "chinese": "宴会/盛宴/宗教节日",
+      "success_count": 5,
+      "next_review_date": "2025-11-06",
+      "example": "The king held a feast for all his loyal subjects_国王为他所有忠诚的臣民举行了一场盛宴",
+      "review_round": 0,
+      "review_count": 5
     },
     {
       "english": "album",
       "chinese": "专辑/相册/集邮册",
-      "success_count": 2,
-      "next_review_date": "2025-10-10",
+      "success_count": 5,
+      "next_review_date": "2025-11-06",
       "example": "This music album contains all the artist's greatest hits_这张音乐专辑包含了这位艺术家的所有热门歌曲",
       "review_round": 0,
-      "review_count": 2
+      "review_count": 5
     },
     {
       "english": "tradition",
       "chinese": "传统/惯例",
-      "success_count": 2,
-      "next_review_date": "2025-10-10",
+      "success_count": 5,
+      "next_review_date": "2025-11-06",
       "example": "The company has a long tradition of fine design_这家公司的优秀设计历史悠久",
       "review_round": 0,
-      "review_count": 2
+      "review_count": 5
     },
     {
       "english": "ancient",
       "chinese": "古老的/古代的",
-      "success_count": 2,
-      "next_review_date": "2025-10-10",
+      "success_count": 5,
+      "next_review_date": "2025-11-06",
       "example": "We visited an ancient temple full of treasures and saintly relics_我们参观了一座充满宝藏和神圣遗物的古老寺庙",
       "review_round": 0,
-      "review_count": 2
+      "review_count": 5
     },
     {
       "english": "wrap",
       "chinese": "包裹/缠绕",
-      "success_count": 2,
-      "next_review_date": "2025-10-10",
+      "success_count": 5,
+      "next_review_date": "2025-11-06",
       "example": "She spent the morning wrapping up the birthday gifts_她花了一个早上的时间把生日礼物都包了起来",
       "review_round": 0,
-      "review_count": 2
+      "review_count": 5
     },
     {
       "english": "town",
       "chinese": "城镇/市镇",
-      "success_count": 2,
-      "next_review_date": "2025-10-10",
+      "success_count": 5,
+      "next_review_date": "2025-11-06",
       "example": "We chose to live out of town and commute to work every day_我们选择住在郊外，每天通勤上班",
       "review_round": 0,
-      "review_count": 2
+      "review_count": 5
     },
     {
       "english": "stick",
       "chinese": "棍棒/粘贴/坚持",
-      "success_count": 2,
-      "next_review_date": "2025-10-10",
+      "success_count": 5,
+      "next_review_date": "2025-11-06",
       "example": "The children used a stick to draw pictures in the sand_孩子们用棍子在沙地上画画",
       "review_round": 0,
-      "review_count": 2
+      "review_count": 5
     },
     {
       "english": "grateful",
       "chinese": "感激的/感谢的",
-      "success_count": 2,
-      "next_review_date": "2025-10-10",
+      "success_count": 5,
+      "next_review_date": "2025-11-06",
       "example": "I am extremely grateful to you for your selfless assistance_我非常感谢你无私的帮助",
       "review_round": 0,
-      "review_count": 2
+      "review_count": 5
     },
     {
       "english": "laughter",
       "chinese": "笑声",
-      "success_count": 4,
-      "next_review_date": "2025-10-10",
+      "success_count": 5,
+      "next_review_date": "2025-10-25",
       "example": "The sound of laughter echoed through the hall_笑声在整个大厅里回荡",
       "review_round": 0,
-      "review_count": 4
+      "review_count": 5
     },
     {
       "english": "fill",
       "chinese": "填充/装满",
-      "success_count": 4,
-      "next_review_date": "2025-10-10",
+      "success_count": 5,
+      "next_review_date": "2025-10-25",
       "example": "Please fill the glass with water_请把杯子装满水",
       "review_round": 0,
-      "review_count": 4
+      "review_count": 5
     },
     {
       "english": "packet",
       "chinese": "包/数据包",
-      "success_count": 4,
-      "next_review_date": "2025-10-10",
+      "success_count": 5,
+      "next_review_date": "2025-10-25",
       "example": "She received a packet of seeds from the garden center_她从园艺中心收到了一包种子",
       "review_round": 0,
-      "review_count": 4
+      "review_count": 5
     }
   ],
   "mastered_words": [
