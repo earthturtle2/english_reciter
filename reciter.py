@@ -11,6 +11,7 @@ from tencentcloud.common import credential
 import re
 import readchar
 
+
 # 配置项
 class Config:
     WORD_FILE = "words.txt"
